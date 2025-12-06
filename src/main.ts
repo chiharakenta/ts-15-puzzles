@@ -1,4 +1,5 @@
 import './style.css';
+import clickSound from '/click.mp3?url';
 
 interface HTMLPuzzleCellElement extends HTMLTableCellElement {
     index: number;
@@ -43,7 +44,7 @@ const click = (event: Event) => {
     const isMoved = handleTileClick(target.index);
 
     if (isMoved) {
-        const audio = new Audio('/click.mp3');
+        const audio = new Audio(clickSound);
         audio.play();
     }
 };
