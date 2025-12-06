@@ -25,3 +25,14 @@ body {
     font-size: 28px;
     margin-top: 20px;
 }
+
+.reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+}

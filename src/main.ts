@@ -21,7 +21,7 @@ for (let i = 0; i < maxAudioPoolSize; i++) {
 const clearAudio = new Audio(clearSound);
 
 let time = 0;
-const intervalId = setInterval(() => {
+const countUp = () => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     const timerElement = document.getElementById('timer');
@@ -29,7 +29,8 @@ const intervalId = setInterval(() => {
         timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
     time++;
-}, 1000);
+};
+let intervalId = setInterval(countUp, 1000);
 
 const init = () => {
     const table = document.getElementById('table');
@@ -71,7 +72,9 @@ const click = (event: Event) => {
         
         if (checkClear()) {
             clearAudio.play();
-            alert('🎉 クリア!おめでとう!!');
+            setTimeout(() => {
+                alert('🎉 クリア!おめでとう!!');
+            }, 100);
             clearInterval(intervalId);
         }
     }
@@ -124,5 +127,11 @@ const shuffle = () => {
     }
 }
 
-
 init();
+document.getElementById('reset')!.onclick = () => {
+    time = 0;
+    document.getElementById('timer')!.textContent = '00:00';
+    shuffle();
+    clearInterval(intervalId);
+    intervalId = setInterval(countUp, 1000);
+};
