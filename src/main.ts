@@ -11,13 +11,8 @@ const puzzleHeight = 4;
 const tiles: Array<HTMLPuzzleCellElement> = [];
 
 // オーディオプールの実装
-const audioPool: HTMLAudioElement[] = [];
-const AUDIO_POOL_SIZE = 5;
-for (let i = 0; i < AUDIO_POOL_SIZE; i++) {
-    const audio = new Audio(clickSound);
-    audio.preload = 'auto';
-    audioPool.push(audio);
-}
+const audio = new Audio(clickSound);
+audio.preload = 'auto';
 
 
 const init = () => {
@@ -54,21 +49,8 @@ const click = (event: Event) => {
     const isMoved = handleTileClick(target.index);
 
     if (isMoved) {
-        playClickSound();
-    }
-};
-
-const playClickSound = () => {
-    // 再生可能な音声を探す
-    const availableAudio = audioPool.find(audio => audio.paused);
-    
-    if (availableAudio) {
-        availableAudio.currentTime = 0; // 最初から再生
-        availableAudio.play();
-    } else {
-        // プールが全て使用中の場合、最初の音声を使う
-        audioPool[0].currentTime = 0;
-        audioPool[0].play();
+        audio.currentTime = 0;
+        audio.play();
     }
 };
 
