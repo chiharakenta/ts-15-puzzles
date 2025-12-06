@@ -34,11 +34,17 @@ const init = () => {
         }
         table.appendChild(tr);
     }
+
+    shuffle();
 };
 
 const click = (event: Event) => {
     const target = event.target as HTMLPuzzleCellElement;
-    const i = target.index;
+    handleTileClick(target.index);
+};
+
+const handleTileClick = (index: number) => {
+    const i = index;
 
     if (i - 4 >= 0 && tiles[i - puzzleWidth].value === 0) {
         swap(i, i - 4); // 上と入れ替え
@@ -56,7 +62,7 @@ const click = (event: Event) => {
         swap(i, i + 1); // 右と入れ替え
         return;
     }
-};
+}
 
 const swap = (i: number, j: number) => {
     const tmp = tiles[i].value;
@@ -65,5 +71,11 @@ const swap = (i: number, j: number) => {
     tiles[j].textContent = tmp.toString();
     tiles[j].value = tmp;
 };
+
+const shuffle = () => {
+    for (let n = 0; n < 1000; n++) {
+        handleTileClick(Math.floor(Math.random() * 16));
+    }
+}
 
 init();
