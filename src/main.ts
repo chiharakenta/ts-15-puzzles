@@ -10,6 +10,14 @@ const puzzleWidth = 4;
 const puzzleHeight = 4;
 const tiles: Array<HTMLPuzzleCellElement> = [];
 
+const audioPool: Array<HTMLAudioElement> = [];
+let currentAudioIndex = 0;
+const maxAudioPoolSize = 5;
+for (let i = 0; i < maxAudioPoolSize; i++) {
+    const audio = new Audio(clickSound);
+    audioPool.push(audio);
+}
+
 const init = () => {
     const table = document.getElementById('table');
     if (!table) {
@@ -44,8 +52,9 @@ const click = (event: Event) => {
     const isMoved = handleTileClick(target.index);
 
     if (isMoved) {
-        const audio = new Audio(clickSound);
+        const audio = audioPool[currentAudioIndex];
         audio.play();
+        currentAudioIndex = (currentAudioIndex + 1) % maxAudioPoolSize;
     }
 };
 
