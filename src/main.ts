@@ -27,7 +27,7 @@ const init = () => {
             td.className = 'tile';
             td.index = index;
             td.value = index;
-            td.textContent = index ? index.toString() : '';
+            td.textContent = index === 15 ? '' : `${index + 1}`;
             td.onclick = click;
             tr.appendChild(td);
             tiles.push(td);
@@ -40,35 +40,43 @@ const init = () => {
 
 const click = (event: Event) => {
     const target = event.target as HTMLPuzzleCellElement;
-    handleTileClick(target.index);
+    const isMoved = handleTileClick(target.index);
+
+    if (isMoved) {
+        const audio = new Audio('/click.mp3');
+        audio.play();
+    }
 };
 
 const handleTileClick = (index: number) => {
     const i = index;
 
-    if (i - 4 >= 0 && tiles[i - puzzleWidth].value === 0) {
+    if (i - 4 >= 0 && tiles[i - puzzleWidth].value === 15) {
         swap(i, i - 4); // 上と入れ替え
-        return;
+        return true;
     }
-    if (i + 4 < 16 && tiles[i + 4].value === 0) {
+    if (i + 4 < 16 && tiles[i + 4].value === 15) {
         swap(i, i + 4); // 下と入れ替え
-        return;
+        return true;
     }
-    if (i % 4 != 0 && tiles[i - 1].value === 0) {
+    if (i % 4 != 0 && tiles[i - 1].value === 15) {
         swap(i, i - 1); // 左と入れ替え
-        return;
+        return true;
     }
-    if (i % 4 != 3 && tiles[i + 1].value === 0) {
+    if (i % 4 != 3 && tiles[i + 1].value === 15) {
         swap(i, i + 1); // 右と入れ替え
-        return;
+        return true;
     }
+    return false;
 }
 
 const swap = (i: number, j: number) => {
     const tmp = tiles[i].value;
-    tiles[i].textContent = tiles[j].textContent;
+    const x = tiles[i].value == 15 ? '' : `${tiles[i].value + 1}`;
+    const y = tiles[j].value == 15 ? '' : `${tiles[j].value + 1}`;
+    tiles[i].textContent = y;
     tiles[i].value = tiles[j].value;
-    tiles[j].textContent = tmp.toString();
+    tiles[j].textContent = x;
     tiles[j].value = tmp;
 };
 
