@@ -71,9 +71,7 @@ const click = (event: Event) => {
         
         if (checkClear()) {
             clearAudio.play();
-            setTimeout(() => {
-                alert('🎉 クリア!おめでとう!!');
-            }, 100);
+            alert('🎉 クリア!おめでとう!!');
             clearInterval(intervalId);
         }
     }
