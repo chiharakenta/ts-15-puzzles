@@ -1,5 +1,6 @@
 import './style.css';
 import clickSound from '/click.mp3?url';
+import clearSound from '/clear.mp3?url';
 
 interface HTMLPuzzleCellElement extends HTMLTableCellElement {
     index: number;
@@ -12,11 +13,23 @@ const tiles: Array<HTMLPuzzleCellElement> = [];
 
 const audioPool: Array<HTMLAudioElement> = [];
 let currentAudioIndex = 0;
-const maxAudioPoolSize = 5;
+const maxAudioPoolSize = 10;
 for (let i = 0; i < maxAudioPoolSize; i++) {
     const audio = new Audio(clickSound);
     audioPool.push(audio);
 }
+const clearAudio = new Audio(clearSound);
+
+let time = 0;
+const intervalId = setInterval(() => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    const timerElement = document.getElementById('timer');
+    if (timerElement) {
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    time++;
+}, 1000);
 
 const init = () => {
     const table = document.getElementById('table');
@@ -55,6 +68,14 @@ const click = (event: Event) => {
         const audio = audioPool[currentAudioIndex];
         audio.play();
         currentAudioIndex = (currentAudioIndex + 1) % maxAudioPoolSize;
+        
+        if (checkClear()) {
+            clearAudio.play();
+            setTimeout(() => {
+                alert('🎉 クリア!おめでとう!!');
+            }, 100);
+            clearInterval(intervalId);
+        }
     }
 };
 
@@ -90,10 +111,20 @@ const swap = (i: number, j: number) => {
     tiles[j].value = tmp;
 };
 
+const checkClear = (): boolean => {
+    for (let i = 0; i < tiles.length; i++) {
+        if (tiles[i].value !== i) {
+            return false;
+        }
+    }
+    return true;
+};
+
 const shuffle = () => {
     for (let n = 0; n < 1000; n++) {
         handleTileClick(Math.floor(Math.random() * 16));
     }
 }
+
 
 init();
